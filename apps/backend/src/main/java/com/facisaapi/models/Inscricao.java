@@ -1,5 +1,6 @@
 package com.facisaapi.models;
 
+import com.facisaapi.enums.StatusInscricao;
 import lombok.Data;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -12,5 +13,5 @@ public class Inscricao {
     private String corredorId;
     private String corridaId;
     private Double distanciaEscolhida;
-    private String status; // Ex: PENDENTE, PAGO, CANCELADO
+    private StatusInscricao status;
 }

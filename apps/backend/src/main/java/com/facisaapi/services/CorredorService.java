@@ -1,32 +1,54 @@
 package com.facisaapi.services;
 
+import com.facisaapi.dtos.CorredorDTO;
 import com.facisaapi.models.Corredor;
 import com.facisaapi.repositories.CorredorRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor
 public class CorredorService {
 
-    @Autowired
-    private CorredorRepository corredorRepository;
+    private final CorredorRepository corredorRepository;
 
-    public List<Corredor> findAll() {
-        return corredorRepository.findAll();
+    public List<CorredorDTO> findAll() {
+        return corredorRepository.findAll().stream()
+                .map(CorredorDTO::fromEntity)
+                .toList();
     }
 
-    public Optional<Corredor> findById(String id) {
-        return corredorRepository.findById(id);
+    public Optional<CorredorDTO> findById(String id) {
+        return corredorRepository.findById(id)
+                .map(CorredorDTO::fromEntity);
     }
 
-    public Corredor save(Corredor corredor) {
-        return corredorRepository.save(corredor);
+    public CorredorDTO create(CorredorDTO dto) {
+        Corredor corredor = dto.toEntity();
+        corredor.setId(null);
+        Corredor salvo = corredorRepository.save(corredor);
+        return CorredorDTO.fromEntity(salvo);
     }
 
-    public void deleteById(String id) {
-        corredorRepository.deleteById(id);
+    public Optional<CorredorDTO> update(String id, CorredorDTO dto) {
+        return corredorRepository.findById(id).map(corredorExistente -> {
+            corredorExistente.setNome(dto.nome());
+            corredorExistente.setCpf(dto.cpf());
+            corredorExistente.setDataNascimento(dto.dataNascimento());
+            corredorExistente.setGenero(dto.genero());
+            Corredor atualizado = corredorRepository.save(corredorExistente);
+            return CorredorDTO.fromEntity(atualizado);
+        });
+    }
+
+    public boolean deleteById(String id) {
+        if (corredorRepository.existsById(id)) {
+            corredorRepository.deleteById(id);
+            return true;
+        }
+        return false;
     }
 }

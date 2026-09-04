@@ -1,73 +1,97 @@
 package com.facisaapi.services;
 
+import com.facisaapi.dtos.InscricaoDTO;
+import com.facisaapi.enums.StatusInscricao;
 import com.facisaapi.models.Corrida;
 import com.facisaapi.models.Inscricao;
 import com.facisaapi.repositories.CorredorRepository;
 import com.facisaapi.repositories.CorridaRepository;
 import com.facisaapi.repositories.InscricaoRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor
 public class InscricaoService {
 
-    @Autowired
-    private InscricaoRepository inscricaoRepository;
+    private final InscricaoRepository inscricaoRepository;
+    private final CorredorRepository corredorRepository;
+    private final CorridaRepository corridaRepository;
 
-    @Autowired
-    private CorredorRepository corredorRepository;
-
-    @Autowired
-    private CorridaRepository corridaRepository;
-
-    public List<Inscricao> findAll() {
-        return inscricaoRepository.findAll();
+    public List<InscricaoDTO> findAll() {
+        return inscricaoRepository.findAll().stream()
+                .map(InscricaoDTO::fromEntity)
+                .toList();
     }
 
-    public Optional<Inscricao> findById(String id) {
-        return inscricaoRepository.findById(id);
+    public Optional<InscricaoDTO> findById(String id) {
+        return inscricaoRepository.findById(id)
+                .map(InscricaoDTO::fromEntity);
     }
 
-    public List<Inscricao> findByCorredorId(String corredorId) {
-        return inscricaoRepository.findByCorredorId(corredorId);
+    public List<InscricaoDTO> findByCorredorId(String corredorId) {
+        return inscricaoRepository.findByCorredorId(corredorId).stream()
+                .map(InscricaoDTO::fromEntity)
+                .toList();
     }
 
-    public List<Inscricao> findByCorridaId(String corridaId) {
-        return inscricaoRepository.findByCorridaId(corridaId);
+    public List<InscricaoDTO> findByCorridaId(String corridaId) {
+        return inscricaoRepository.findByCorridaId(corridaId).stream()
+                .map(InscricaoDTO::fromEntity)
+                .toList();
     }
 
-    public Inscricao save(Inscricao inscricao) {
-        // Validação 1: O corredor existe?
-        if (!corredorRepository.existsById(inscricao.getCorredorId())) {
-            throw new IllegalArgumentException("Corredor não encontrado com o ID fornecido.");
+    public InscricaoDTO create(InscricaoDTO dto) {
+        validarInscricao(dto);
+
+        Inscricao inscricao = dto.toEntity();
+        inscricao.setId(null);
+
+        Inscricao salva = inscricaoRepository.save(inscricao);
+        return InscricaoDTO.fromEntity(salva);
+    }
+
+    public Optional<InscricaoDTO> update(String id, InscricaoDTO dto) {
+        if (!inscricaoRepository.existsById(id)) {
+            return Optional.empty();
         }
 
-        // Validação 2: A corrida existe?
-        Optional<Corrida> corridaOpt = corridaRepository.findById(inscricao.getCorridaId());
-        if (corridaOpt.isEmpty()) {
-            throw new IllegalArgumentException("Corrida não encontrada com o ID fornecido.");
-        }
+        validarInscricao(dto);
 
-        // Validação 3: A distância escolhida existe na corrida?
-        Corrida corrida = corridaOpt.get();
-        if (corrida.getDistancias() == null || !corrida.getDistancias().contains(inscricao.getDistanciaEscolhida())) {
-            throw new IllegalArgumentException("A distância escolhida (" + inscricao.getDistanciaEscolhida() + "km) não está disponível para esta corrida. Distâncias permitidas: " + corrida.getDistancias());
-        }
-
-        // Validação 4: Status do pagamento é válido?
-        List<String> statusPermitidos = List.of("PENDENTE", "PAGO", "CANCELADO");
-        if (inscricao.getStatus() == null || !statusPermitidos.contains(inscricao.getStatus().toUpperCase())) {
-            throw new IllegalArgumentException("Status de pagamento inválido. Valores permitidos: " + statusPermitidos);
-        }
-        inscricao.setStatus(inscricao.getStatus().toUpperCase()); // Padroniza tudo para maiúsculo
-
-        return inscricaoRepository.save(inscricao);
+        return inscricaoRepository.findById(id).map(inscricaoExistente -> {
+            inscricaoExistente.setCorredorId(dto.corredorId());
+            inscricaoExistente.setCorridaId(dto.corridaId());
+            inscricaoExistente.setDistanciaEscolhida(dto.distanciaEscolhida());
+            if (dto.status() != null) {
+                inscricaoExistente.setStatus(dto.status());
+            }
+            Inscricao atualizada = inscricaoRepository.save(inscricaoExistente);
+            return InscricaoDTO.fromEntity(atualizada);
+        });
     }
 
-    public void deleteById(String id) {
-        inscricaoRepository.deleteById(id);
+    public boolean deleteById(String id) {
+        if (inscricaoRepository.existsById(id)) {
+            inscricaoRepository.deleteById(id);
+            return true;
+        }
+        return false;
+    }
+
+    private void validarInscricao(InscricaoDTO dto) {
+        if (!corredorRepository.existsById(dto.corredorId())) {
+            throw new IllegalArgumentException("Corredor não encontrado com o ID: " + dto.corredorId());
+        }
+
+        Corrida corrida = corridaRepository.findById(dto.corridaId())
+                .orElseThrow(() -> new IllegalArgumentException("Corrida não encontrada com o ID: " + dto.corridaId()));
+
+        if (corrida.getDistancias() == null || !corrida.getDistancias().contains(dto.distanciaEscolhida())) {
+            throw new IllegalArgumentException("A distância de " + dto.distanciaEscolhida()
+                    + " km não está disponível nesta corrida. Opções válidas: " + corrida.getDistancias());
+        }
     }
 }

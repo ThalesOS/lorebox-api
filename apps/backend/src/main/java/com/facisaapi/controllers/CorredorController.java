@@ -1,50 +1,53 @@
 package com.facisaapi.controllers;
 
-import com.facisaapi.models.Corredor;
+import com.facisaapi.dtos.CorredorDTO;
 import com.facisaapi.services.CorredorService;
-import org.springframework.beans.factory.annotation.Autowired;
+import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/corredores")
-@CrossOrigin(origins = "*") // Para permitir requisições do Angular futuramente
+@CrossOrigin(origins = "*")
+@RequiredArgsConstructor
 public class CorredorController {
 
-    @Autowired
-    private CorredorService corredorService;
+    private final CorredorService corredorService;
 
     @GetMapping
-    public List<Corredor> getAll() {
-        return corredorService.findAll();
+    public ResponseEntity<List<CorredorDTO>> getAll() {
+        return ResponseEntity.ok(corredorService.findAll());
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Corredor> getById(@PathVariable String id) {
-        Optional<Corredor> corredor = corredorService.findById(id);
-        return corredor.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+    public ResponseEntity<CorredorDTO> getById(@PathVariable String id) {
+        return corredorService.findById(id)
+                .map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @PostMapping
-    public Corredor create(@RequestBody Corredor corredor) {
-        return corredorService.save(corredor);
-    }
-
-    @DeleteMapping("/{id}")
-    public ResponseEntity<String> delete(@PathVariable String id) {
-        corredorService.deleteById(id);
-        return ResponseEntity.ok("Corredor excluído com sucesso!");
+    public ResponseEntity<CorredorDTO> create(@Valid @RequestBody CorredorDTO dto) {
+        CorredorDTO criado = corredorService.create(dto);
+        return ResponseEntity.status(HttpStatus.CREATED).body(criado);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Corredor> update(@PathVariable String id, @RequestBody Corredor corredorAtualizado) {
-        if (!corredorService.findById(id).isPresent()) {
-            return ResponseEntity.notFound().build();
+    public ResponseEntity<CorredorDTO> update(@PathVariable String id, @Valid @RequestBody CorredorDTO dto) {
+        return corredorService.update(id, dto)
+                .map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.notFound().build());
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> delete(@PathVariable String id) {
+        if (corredorService.deleteById(id)) {
+            return ResponseEntity.noContent().build();
         }
-        corredorAtualizado.setId(id);
-        return ResponseEntity.ok(corredorService.save(corredorAtualizado));
+        return ResponseEntity.notFound().build();
     }
 }

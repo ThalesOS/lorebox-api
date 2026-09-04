@@ -15,5 +15,5 @@ public class Corrida {
     private String nome;
     private LocalDate data;
     private String local;
-    private List<Double> distancias; // Ex: 3.0, 10.0, 21.0 km
+    private List<Double> distancias;
 }

@@ -1,32 +1,54 @@
 package com.facisaapi.services;
 
+import com.facisaapi.dtos.CorridaDTO;
 import com.facisaapi.models.Corrida;
 import com.facisaapi.repositories.CorridaRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor
 public class CorridaService {
 
-    @Autowired
-    private CorridaRepository corridaRepository;
+    private final CorridaRepository corridaRepository;
 
-    public List<Corrida> findAll() {
-        return corridaRepository.findAll();
+    public List<CorridaDTO> findAll() {
+        return corridaRepository.findAll().stream()
+                .map(CorridaDTO::fromEntity)
+                .toList();
     }
 
-    public Optional<Corrida> findById(String id) {
-        return corridaRepository.findById(id);
+    public Optional<CorridaDTO> findById(String id) {
+        return corridaRepository.findById(id)
+                .map(CorridaDTO::fromEntity);
     }
 
-    public Corrida save(Corrida corrida) {
-        return corridaRepository.save(corrida);
+    public CorridaDTO create(CorridaDTO dto) {
+        Corrida corrida = dto.toEntity();
+        corrida.setId(null);
+        Corrida salva = corridaRepository.save(corrida);
+        return CorridaDTO.fromEntity(salva);
     }
 
-    public void deleteById(String id) {
-        corridaRepository.deleteById(id);
+    public Optional<CorridaDTO> update(String id, CorridaDTO dto) {
+        return corridaRepository.findById(id).map(corridaExistente -> {
+            corridaExistente.setNome(dto.nome());
+            corridaExistente.setData(dto.data());
+            corridaExistente.setLocal(dto.local());
+            corridaExistente.setDistancias(dto.distancias());
+            Corrida atualizada = corridaRepository.save(corridaExistente);
+            return CorridaDTO.fromEntity(atualizada);
+        });
+    }
+
+    public boolean deleteById(String id) {
+        if (corridaRepository.existsById(id)) {
+            corridaRepository.deleteById(id);
+            return true;
+        }
+        return false;
     }
 }
