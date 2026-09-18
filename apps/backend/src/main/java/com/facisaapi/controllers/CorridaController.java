@@ -12,7 +12,6 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/corridas")
-@CrossOrigin(origins = "*")
 @RequiredArgsConstructor
 public class CorridaController {
 

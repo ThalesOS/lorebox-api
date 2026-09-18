@@ -12,7 +12,6 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/corredores")
-@CrossOrigin(origins = "*")
 @RequiredArgsConstructor
 public class CorredorController {
 
