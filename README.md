@@ -9,10 +9,11 @@ Sistema de gerenciamento de inscrições em corridas, com cadastro de corredores
 
 ## Equipe
 
-- Maurickson Xavier Braga
 - Ana Cristina Batista Japiassu
-- Thales de Oliveira Silva
+- Enzo Barros Pietoso Camara
 - Felipe Monteiro Gomes
+- Maurickson Xavier Braga
+- Thales de Oliveira Silva
 
 ## Stack
 

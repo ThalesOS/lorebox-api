@@ -1,0 +1,33 @@
+<h2 class="mb-6 text-2xl font-semibold text-slate-800">Corredor</h2>
+
+@if (corredor) {
+  <dl class="max-w-md space-y-3 rounded-lg border border-gray-200 bg-white p-6 shadow-sm">
+    <div>
+      <dt class="text-xs font-medium uppercase text-gray-500">Nome</dt>
+      <dd class="text-sm text-slate-800">{{ corredor.nome }}</dd>
+    </div>
+    <div>
+      <dt class="text-xs font-medium uppercase text-gray-500">CPF</dt>
+      <dd class="text-sm text-slate-800">{{ corredor.cpf }}</dd>
+    </div>
+    <div>
+      <dt class="text-xs font-medium uppercase text-gray-500">Data de nascimento</dt>
+      <dd class="text-sm text-slate-800">{{ corredor.dataNascimento }}</dd>
+    </div>
+    <div>
+      <dt class="text-xs font-medium uppercase text-gray-500">Gênero</dt>
+      <dd class="text-sm text-slate-800">{{ corredor.genero }}</dd>
+    </div>
+  </dl>
+
+  <a
+    [routerLink]="['/corredores', corredor.id, 'editar']"
+    class="mt-4 inline-block rounded-md bg-slate-800 px-4 py-2 text-sm font-medium text-white hover:bg-slate-700"
+  >
+    Editar
+  </a>
+}
+
+<a routerLink="/corredores" class="mt-4 block text-sm text-slate-600 hover:text-slate-900">
+  Ir para Lista de Corredores
+</a>

@@ -1,0 +1,44 @@
+<div class="mb-6 flex items-center justify-between">
+  <h2 class="text-2xl font-semibold text-slate-800">Lista de Corredores</h2>
+  <a
+    routerLink="/corredores/novo"
+    class="rounded-md bg-slate-800 px-4 py-2 text-sm font-medium text-white hover:bg-slate-700"
+  >
+    Novo corredor
+  </a>
+</div>
+
+<div class="overflow-hidden rounded-lg border border-gray-200 bg-white shadow-sm">
+  <table class="w-full text-left text-sm">
+    <thead class="bg-gray-100 text-xs uppercase text-gray-500">
+      <tr>
+        <th class="px-4 py-3">Nome</th>
+        <th class="px-4 py-3">CPF</th>
+        <th class="px-4 py-3">Data de nascimento</th>
+        <th class="px-4 py-3">Gênero</th>
+        <th class="px-4 py-3"></th>
+      </tr>
+    </thead>
+    <tbody class="divide-y divide-gray-100">
+      @for (corredor of corredores; track corredor.id) {
+        <tr class="hover:bg-gray-50">
+          <td class="px-4 py-3 font-medium text-slate-800">{{ corredor.nome }}</td>
+          <td class="px-4 py-3 text-slate-600">{{ corredor.cpf }}</td>
+          <td class="px-4 py-3 text-slate-600">{{ corredor.dataNascimento }}</td>
+          <td class="px-4 py-3 text-slate-600">{{ corredor.genero }}</td>
+          <td class="px-4 py-3">
+            <div class="flex justify-end gap-3">
+              <a [routerLink]="['/corredores', corredor.id]" class="text-slate-600 hover:text-slate-900">Ver</a>
+              <a [routerLink]="['/corredores', corredor.id, 'editar']" class="text-blue-600 hover:text-blue-800">Editar</a>
+              <button (click)="excluir(corredor.id!)" class="text-red-600 hover:text-red-800">Excluir</button>
+            </div>
+          </td>
+        </tr>
+      } @empty {
+        <tr>
+          <td colspan="5" class="px-4 py-6 text-center text-slate-500">Nenhum corredor cadastrado.</td>
+        </tr>
+      }
+    </tbody>
+  </table>
+</div>
