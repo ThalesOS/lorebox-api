@@ -7,6 +7,8 @@ import { CorredorEditaComponent } from './features/corredor/corredor-edita/corre
 // SEUS NOVOS IMPORTS DA CORRIDA:
 import { CorridaListaComponent } from './features/corrida/corrida-lista/corrida-lista.component';
 import { CorridaNovoComponent } from './features/corrida/corrida-novo/corrida-novo.component';
+import { CorridaExibeComponent } from './features/corrida/corrida-exibe/corrida-exibe.component';
+import { CorridaEditaComponent } from './features/corrida/corrida-edita/corrida-edita.component';
 
 export const routes: Routes = [
   // Rotas do Corredor (do seu colega)
@@ -17,5 +19,7 @@ export const routes: Routes = [
 
   // SUAS NOVAS ROTAS DA CORRIDA:
   { path: 'corridas', component: CorridaListaComponent },
-  { path: 'corridas/novo', component: CorridaNovoComponent }
+  { path: 'corridas/novo', component: CorridaNovoComponent },
+  { path: 'corridas/:id', component: CorridaExibeComponent },
+  { path: 'corridas/:id/editar', component: CorridaEditaComponent },
 ];

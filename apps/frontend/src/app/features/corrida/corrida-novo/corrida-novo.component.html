@@ -1,41 +1,65 @@
-<div class="container mt-4">
-  <div class="card">
-    <div class="card-header bg-primary text-white">
-      <h3 class="mb-0">Cadastrar Nova Corrida</h3>
-    </div>
-    <div class="card-body">
-      <form (ngSubmit)="salvar()" #formCorrida="ngForm">
-        
-        <div class="mb-3">
-          <label for="nome" class="form-label">Nome da Corrida</label>
-          <input type="text" id="nome" name="nome" class="form-control" [(ngModel)]="corrida.nome" required #nome="ngModel">
-          <div *ngIf="nome.invalid && nome.touched" class="text-danger small">O nome é obrigatório.</div>
-        </div>
+<h2 class="mb-6 text-2xl font-semibold text-slate-800">Cadastrar Nova Corrida</h2>
 
-        <div class="mb-3">
-          <label for="data" class="form-label">Data do Evento</label>
-          <input type="date" id="data" name="data" class="form-control" [(ngModel)]="corrida.data" required #data="ngModel">
-          <div *ngIf="data.invalid && data.touched" class="text-danger small">A data é obrigatória.</div>
-        </div>
-
-        <div class="mb-3">
-          <label for="local" class="form-label">Local / Cidade</label>
-          <input type="text" id="local" name="local" class="form-control" [(ngModel)]="corrida.local" required #local="ngModel">
-          <div *ngIf="local.invalid && local.touched" class="text-danger small">O local é obrigatório.</div>
-        </div>
-
-        <div class="mb-3">
-          <label for="distancias" class="form-label">Distâncias Disponíveis (separadas por vírgula)</label>
-          <input type="text" id="distancias" name="distanciasTexto" class="form-control" [(ngModel)]="distanciasTexto" placeholder="Ex: 5, 10, 21" required>
-          <div class="form-text text-muted">Digite os quilômetros separados por vírgula.</div>
-        </div>
-
-        <div class="d-flex justify-content-end gap-2">
-          <button type="button" class="btn btn-secondary" routerLink="/corridas">Cancelar</button>
-          <button type="submit" class="btn btn-success" [disabled]="formCorrida.invalid">Salvar Corrida</button>
-        </div>
-
-      </form>
-    </div>
+<form [formGroup]="form" (ngSubmit)="salvar()" class="max-w-md space-y-4 rounded-lg border border-gray-200 bg-white p-6 shadow-sm">
+  <div>
+    <label class="mb-1 block text-sm font-medium text-slate-700">Nome da Corrida</label>
+    <input
+      formControlName="nome"
+      placeholder="Nome da corrida"
+      class="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-slate-500 focus:outline-none focus:ring-1 focus:ring-slate-500"
+    />
+    @if (form.controls.nome.invalid && form.controls.nome.touched) {
+      <p class="mt-1 text-xs text-red-600">O nome é obrigatório.</p>
+    }
   </div>
-</div>
+
+  <div>
+    <label class="mb-1 block text-sm font-medium text-slate-700">Data do Evento</label>
+    <input
+      formControlName="data"
+      type="date"
+      class="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-slate-500 focus:outline-none focus:ring-1 focus:ring-slate-500"
+    />
+    @if (form.controls.data.invalid && form.controls.data.touched) {
+      <p class="mt-1 text-xs text-red-600">A data é obrigatória.</p>
+    }
+  </div>
+
+  <div>
+    <label class="mb-1 block text-sm font-medium text-slate-700">Local / Cidade</label>
+    <input
+      formControlName="local"
+      placeholder="Local"
+      class="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-slate-500 focus:outline-none focus:ring-1 focus:ring-slate-500"
+    />
+    @if (form.controls.local.invalid && form.controls.local.touched) {
+      <p class="mt-1 text-xs text-red-600">O local é obrigatório.</p>
+    }
+  </div>
+
+  <div>
+    <label class="mb-1 block text-sm font-medium text-slate-700">Distâncias Disponíveis (separadas por vírgula)</label>
+    <input
+      formControlName="distanciasTexto"
+      placeholder="Ex: 5, 10, 21"
+      class="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-slate-500 focus:outline-none focus:ring-1 focus:ring-slate-500"
+    />
+    <p class="mt-1 text-xs text-gray-500">Digite os quilômetros separados por vírgula.</p>
+  </div>
+
+  <div class="flex justify-end gap-3">
+    <a
+      routerLink="/corridas"
+      class="rounded-md border border-gray-300 px-4 py-2 text-sm font-medium text-slate-700 hover:bg-gray-50"
+    >
+      Cancelar
+    </a>
+    <button
+      type="submit"
+      [disabled]="form.invalid"
+      class="rounded-md bg-slate-800 px-4 py-2 text-sm font-medium text-white hover:bg-slate-700 disabled:cursor-not-allowed disabled:opacity-50"
+    >
+      Salvar Corrida
+    </button>
+  </div>
+</form>
