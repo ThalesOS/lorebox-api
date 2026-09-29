@@ -4,9 +4,18 @@ import { CorredorListComponent } from './features/corredor/corredor-lista/corred
 import { CorredorExibeComponent } from './features/corredor/corredor-exibe/corredor-exibe.component';
 import { CorredorEditaComponent } from './features/corredor/corredor-edita/corredor-edita.component';
 
+// SEUS NOVOS IMPORTS DA CORRIDA:
+import { CorridaListaComponent } from './features/corrida/corrida-lista/corrida-lista.component';
+import { CorridaNovoComponent } from './features/corrida/corrida-novo/corrida-novo.component';
+
 export const routes: Routes = [
+  // Rotas do Corredor (do seu colega)
   { path: 'corredores', component: CorredorListComponent },
   { path: 'corredores/novo', component: CorredorFormComponent },
   { path: 'corredores/:id', component: CorredorExibeComponent },
   { path: 'corredores/:id/editar', component: CorredorEditaComponent },
+
+  // SUAS NOVAS ROTAS DA CORRIDA:
+  { path: 'corridas', component: CorridaListaComponent },
+  { path: 'corridas/novo', component: CorridaNovoComponent }
 ];

@@ -1,1 +1,41 @@
-<p>corrida-novo works!</p>
+<div class="container mt-4">
+  <div class="card">
+    <div class="card-header bg-primary text-white">
+      <h3 class="mb-0">Cadastrar Nova Corrida</h3>
+    </div>
+    <div class="card-body">
+      <form (ngSubmit)="salvar()" #formCorrida="ngForm">
+        
+        <div class="mb-3">
+          <label for="nome" class="form-label">Nome da Corrida</label>
+          <input type="text" id="nome" name="nome" class="form-control" [(ngModel)]="corrida.nome" required #nome="ngModel">
+          <div *ngIf="nome.invalid && nome.touched" class="text-danger small">O nome é obrigatório.</div>
+        </div>
+
+        <div class="mb-3">
+          <label for="data" class="form-label">Data do Evento</label>
+          <input type="date" id="data" name="data" class="form-control" [(ngModel)]="corrida.data" required #data="ngModel">
+          <div *ngIf="data.invalid && data.touched" class="text-danger small">A data é obrigatória.</div>
+        </div>
+
+        <div class="mb-3">
+          <label for="local" class="form-label">Local / Cidade</label>
+          <input type="text" id="local" name="local" class="form-control" [(ngModel)]="corrida.local" required #local="ngModel">
+          <div *ngIf="local.invalid && local.touched" class="text-danger small">O local é obrigatório.</div>
+        </div>
+
+        <div class="mb-3">
+          <label for="distancias" class="form-label">Distâncias Disponíveis (separadas por vírgula)</label>
+          <input type="text" id="distancias" name="distanciasTexto" class="form-control" [(ngModel)]="distanciasTexto" placeholder="Ex: 5, 10, 21" required>
+          <div class="form-text text-muted">Digite os quilômetros separados por vírgula.</div>
+        </div>
+
+        <div class="d-flex justify-content-end gap-2">
+          <button type="button" class="btn btn-secondary" routerLink="/corridas">Cancelar</button>
+          <button type="submit" class="btn btn-success" [disabled]="formCorrida.invalid">Salvar Corrida</button>
+        </div>
+
+      </form>
+    </div>
+  </div>
+</div>
