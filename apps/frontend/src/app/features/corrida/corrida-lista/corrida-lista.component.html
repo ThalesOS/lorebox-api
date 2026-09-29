@@ -19,7 +19,7 @@
         <td>{{ corrida.nome }}</td>
         <td>{{ corrida.data | date:'dd/MM/yyyy' }}</td>
         <td>{{ corrida.local }}</td>
-        <td>{{ corrida.distancias?.join(', ') }} Km</td>
+        <td>{{ corrida.distancias.join(', ') }} Km</td>
         <td>
           <button class="btn btn-sm btn-info me-2" [routerLink]="['/corridas/exibe', corrida.id]">Ver</button>
           <button class="btn btn-sm btn-warning me-2" [routerLink]="['/corridas/edita', corrida.id]">Editar</button>
