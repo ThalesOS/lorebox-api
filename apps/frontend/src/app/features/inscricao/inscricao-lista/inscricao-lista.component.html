@@ -1,0 +1,56 @@
+<div class="mb-6 flex items-center justify-between">
+  <h2 class="text-2xl font-semibold text-slate-800">Lista de Inscrições</h2>
+  <a
+    routerLink="/inscricoes/novo"
+    class="rounded-md bg-slate-800 px-4 py-2 text-sm font-medium text-white hover:bg-slate-700"
+  >
+    Nova inscrição
+  </a>
+</div>
+
+<div class="overflow-hidden rounded-lg border border-gray-200 bg-white shadow-sm">
+  <table class="w-full text-left text-sm">
+    <thead class="bg-gray-100 text-xs uppercase text-gray-500">
+      <tr>
+        <th class="px-4 py-3">Corredor</th>
+        <th class="px-4 py-3">Corrida</th>
+        <th class="px-4 py-3">Distância (km)</th>
+        <th class="px-4 py-3">Status</th>
+        <th class="px-4 py-3"></th>
+      </tr>
+    </thead>
+    <tbody class="divide-y divide-gray-100">
+      @for (inscricao of inscricoes; track inscricao.id) {
+        <tr class="hover:bg-gray-50">
+          <td class="px-4 py-3 font-medium text-slate-800">{{ getCorredorNome(inscricao.corredorId) }}</td>
+          <td class="px-4 py-3 text-slate-600">{{ getCorridaNome(inscricao.corridaId) }}</td>
+          <td class="px-4 py-3 text-slate-600">{{ inscricao.distanciaEscolhida }} km</td>
+          <td class="px-4 py-3">
+            <span
+              class="inline-block rounded-full px-2 py-0.5 text-xs font-semibold"
+              [class.bg-yellow-100]="inscricao.status === 'PENDENTE'"
+              [class.text-yellow-800]="inscricao.status === 'PENDENTE'"
+              [class.bg-green-100]="inscricao.status === 'PAGO'"
+              [class.text-green-800]="inscricao.status === 'PAGO'"
+              [class.bg-red-100]="inscricao.status === 'CANCELADO'"
+              [class.text-red-800]="inscricao.status === 'CANCELADO'"
+            >
+              {{ inscricao.status }}
+            </span>
+          </td>
+          <td class="px-4 py-3">
+            <div class="flex justify-end gap-3">
+              <a [routerLink]="['/inscricoes', inscricao.id]" class="text-slate-600 hover:text-slate-900">Ver</a>
+              <a [routerLink]="['/inscricoes', inscricao.id, 'editar']" class="text-blue-600 hover:text-blue-800">Editar</a>
+              <button (click)="excluir(inscricao.id!)" class="text-red-600 hover:text-red-800">Excluir</button>
+            </div>
+          </td>
+        </tr>
+      } @empty {
+        <tr>
+          <td colspan="5" class="px-4 py-6 text-center text-slate-500">Nenhuma inscrição cadastrada.</td>
+        </tr>
+      }
+    </tbody>
+  </table>
+</div>

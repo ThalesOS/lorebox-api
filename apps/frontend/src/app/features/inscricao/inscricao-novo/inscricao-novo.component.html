@@ -1,0 +1,63 @@
+<h2 class="mb-6 text-2xl font-semibold text-slate-800">Nova Inscrição</h2>
+
+<form [formGroup]="form" (ngSubmit)="salvar()" class="max-w-md space-y-4 rounded-lg border border-gray-200 bg-white p-6 shadow-sm">
+  <div>
+    <label class="mb-1 block text-sm font-medium text-slate-700">Corredor</label>
+    <select
+      formControlName="corredorId"
+      class="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-slate-500 focus:outline-none focus:ring-1 focus:ring-slate-500"
+    >
+      <option value="">Selecione um corredor</option>
+      @for (c of corredores; track c.id) {
+        <option [value]="c.id">{{ c.nome }} (CPF: {{ c.cpf }})</option>
+      }
+    </select>
+  </div>
+
+  <div>
+    <label class="mb-1 block text-sm font-medium text-slate-700">Corrida</label>
+    <select
+      formControlName="corridaId"
+      class="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-slate-500 focus:outline-none focus:ring-1 focus:ring-slate-500"
+    >
+      <option value="">Selecione uma corrida</option>
+      @for (c of corridas; track c.id) {
+        <option [value]="c.id">{{ c.nome }} - {{ c.local }}</option>
+      }
+    </select>
+  </div>
+
+  <div>
+    <label class="mb-1 block text-sm font-medium text-slate-700">Distância Escolhida (km)</label>
+    <input
+      formControlName="distanciaEscolhida"
+      type="number"
+      step="0.1"
+      class="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-slate-500 focus:outline-none focus:ring-1 focus:ring-slate-500"
+    />
+  </div>
+
+  <div>
+    <label class="mb-1 block text-sm font-medium text-slate-700">Status</label>
+    <select
+      formControlName="status"
+      class="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-slate-500 focus:outline-none focus:ring-1 focus:ring-slate-500"
+    >
+      <option value="PENDENTE">Pendente</option>
+      <option value="PAGO">Pago</option>
+      <option value="CANCELADO">Cancelado</option>
+    </select>
+  </div>
+
+  <button
+    type="submit"
+    [disabled]="form.invalid"
+    class="rounded-md bg-slate-800 px-4 py-2 text-sm font-medium text-white hover:bg-slate-700 disabled:cursor-not-allowed disabled:opacity-50"
+  >
+    Salvar
+  </button>
+</form>
+
+<a routerLink="/inscricoes" class="mt-4 inline-block text-sm text-slate-600 hover:text-slate-900">
+  Ir para Lista de Inscrições
+</a>

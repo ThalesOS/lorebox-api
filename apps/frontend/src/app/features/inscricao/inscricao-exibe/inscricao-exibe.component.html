@@ -1,0 +1,16 @@
+<h2 class="mb-6 text-2xl font-semibold text-slate-800">Detalhes da Inscrição</h2>
+
+@if (inscricao) {
+  <div class="max-w-md space-y-3 rounded-lg border border-gray-200 bg-white p-6 shadow-sm">
+    <p><strong class="text-slate-700">Corredor:</strong> {{ corredorNome || inscricao.corredorId }}</p>
+    <p><strong class="text-slate-700">Corrida:</strong> {{ corridaNome || inscricao.corridaId }}</p>
+    <p><strong class="text-slate-700">Distância Escolhida:</strong> {{ inscricao.distanciaEscolhida }} km</p>
+    <p><strong class="text-slate-700">Status:</strong> {{ inscricao.status }}</p>
+  </div>
+} @else {
+  <p class="text-slate-500">Carregando detalhes...</p>
+}
+
+<a routerLink="/inscricoes" class="mt-4 inline-block text-sm text-slate-600 hover:text-slate-900">
+  Voltar para Lista de Inscrições
+</a>

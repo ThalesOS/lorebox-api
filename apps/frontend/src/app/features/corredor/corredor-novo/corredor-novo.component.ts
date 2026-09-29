@@ -1,8 +1,8 @@
 import { Component, inject } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import { Router, RouterLink } from '@angular/router';
 import { CorredorService } from '../../../core/corredor.service';
 import { Corredor } from '../../../models/corredor.model';
-import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-corredor-novo',
@@ -12,6 +12,7 @@ import { RouterLink } from '@angular/router';
 })
 export class CorredorFormComponent {
   private fb = inject(FormBuilder);
+  private router = inject(Router);
   private corredorService = inject(CorredorService);
 
   form = this.fb.group({
@@ -24,8 +25,8 @@ export class CorredorFormComponent {
   salvar() {
     if (this.form.invalid) return;
     this.corredorService.create(this.form.value as Corredor).subscribe({
-      next: () => console.log('Corredor cadastrado com sucesso'),
-      error: (err) => console.error('Erro ao cadastrar', err.error), // err.error = ErrorResponse do GlobalExceptionHandler
+      next: () => this.router.navigate(['/corredores']),
+      error: (err) => console.error('Erro ao cadastrar', err.error),
     });
   }
 }
