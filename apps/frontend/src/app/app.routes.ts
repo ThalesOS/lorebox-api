@@ -9,6 +9,11 @@ import { InscricaoNovoComponent } from './features/inscricao/inscricao-novo/insc
 import { InscricaoExibeComponent } from './features/inscricao/inscricao-exibe/inscricao-exibe.component';
 import { InscricaoEditaComponent } from './features/inscricao/inscricao-edita/inscricao-edita.component';
 
+import { CorridaListaComponent } from './features/corrida/corrida-lista/corrida-lista.component';
+import { CorridaNovoComponent } from './features/corrida/corrida-novo/corrida-novo.component';
+import { CorridaExibeComponent } from './features/corrida/corrida-exibe/corrida-exibe.component';
+import { CorridaEditaComponent } from './features/corrida/corrida-edita/corrida-edita.component';
+
 export const routes: Routes = [
   { path: '', redirectTo: 'corredores', pathMatch: 'full' },
   { path: 'corredores', component: CorredorListComponent },
@@ -20,4 +25,9 @@ export const routes: Routes = [
   { path: 'inscricoes/novo', component: InscricaoNovoComponent },
   { path: 'inscricoes/:id', component: InscricaoExibeComponent },
   { path: 'inscricoes/:id/editar', component: InscricaoEditaComponent },
+
+  { path: 'corridas', component: CorridaListaComponent },
+  { path: 'corridas/novo', component: CorridaNovoComponent },
+  { path: 'corridas/:id', component: CorridaExibeComponent },
+  { path: 'corridas/:id/editar', component: CorridaEditaComponent },
 ];

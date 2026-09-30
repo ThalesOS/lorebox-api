@@ -32,12 +32,21 @@ apps/
 
 ### Backend
 
+A conexão com o MongoDB é definida pela variável de ambiente `SPRING_MONGODB_URI` (nunca é versionada). Configure antes de rodar:
+
+**Pelo terminal:**
 ```bash
+export SPRING_MONGODB_URI="mongodb://localhost:27017/gerenciador_corridas"
+# ou a connection string do Atlas, se preferir usar o banco compartilhado
 cd apps/backend
 ./mvnw spring-boot:run
 ```
 
-A API sobe em `http://localhost:8080`. É necessário ter o MongoDB rodando localmente (`mongodb://localhost:27017`).
+**Pelo IntelliJ:** Run → Edit Configurations → `FacisaApiApplication` → aba "Modify options" → "Environment variables" → adicione `SPRING_MONGODB_URI=<sua connection string>`.
+
+Peça a connection string do Atlas pra equipe por um canal seguro (não cole em chat/print/commit).
+
+A API sobe em `http://localhost:8080`.
 
 ### Frontend
 
